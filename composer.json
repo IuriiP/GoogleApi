@@ -1,6 +1,6 @@
 {
     "name": "iuriip/google-api",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "Simple Google API v3 wrapper for Laravel 5",
     "keywords": ["geocoding", "google geocoding api", "laravel"],
     "homepage": "https://github.com/iuriip/GoogleApi",
