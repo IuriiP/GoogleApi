@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Simple Google API v3 wrapper for Laravel 5",
     "keywords": ["geocoding", "google geocoding api", "laravel"],
-    "homepage": "https://github.com/iuriip/GoogleApis",
+    "homepage": "https://github.com/iuriip/GoogleApi",
     "license": "MIT",
     "authors": [
         {
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-0": {
-            "IuriiP\\GoogleApis": "src/"
+            "IuriiP\\GoogleApi": "src/"
         }
 
     }
