@@ -1,5 +1,5 @@
 {
-    "name": "iuriip/google-apis",
+    "name": "iuriip/google-api",
     "version": "1.0.0",
     "description": "Simple Google API v3 wrapper for Laravel 5",
     "keywords": ["geocoding", "google geocoding api", "laravel"],
@@ -11,8 +11,9 @@
             "email": "hardwork.mouse@gmail.com"
         }
     ],
-  "require": {
-        "php": ">=5.3.0"
+    "require": {
+        "php": ">=5.3.0",
+        "laravel/framework": "5.*"
     },
     "autoload": {
         "psr-0": {
