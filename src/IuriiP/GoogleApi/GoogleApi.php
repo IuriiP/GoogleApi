@@ -116,11 +116,15 @@ class GoogleApi {
     }
 
     public static function getFirstLine($objects) {
-        return self::getFirst($objects, ['route']);
+        return self::getFirst($objects, ['route',
+                    'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
+        ]);
     }
+
     public static function getFirstRoute($objects) {
         return self::getFirstLine($objects);
     }
+
     public static function getFirstArea($objects) {
         return self::getFirst($objects, [
                     'administrative_area_level_1', // indicates a first-order civil entity below the country level. Within the United States, these administrative levels are states. Not all nations exhibit these administrative levels.
@@ -134,6 +138,7 @@ class GoogleApi {
                     'premise', // indicates a named location, usually a building or collection of buildings with a common name
                     'natural_feature', // indicates a prominent natural feature.
                     'park', // indicates a named park.
+                    'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
         ]);
     }
 
