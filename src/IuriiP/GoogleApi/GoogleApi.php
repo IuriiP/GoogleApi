@@ -60,13 +60,13 @@ class GoogleApi {
         }
         return [];
     }
-    
-    public function __call($name,$param) {
-        return $this->call($name,$param);
+
+    public function __call($name, $param) {
+        return $this->call($name, $param);
     }
-    
-    public function __callStatic($name,$param) {
-        $requestUrl = \Config::get('google-api.requestUrl'); 
+
+    public function __callStatic($name, $param) {
+        $requestUrl = \Config::get('google-api.requestUrl');
         if (array_key_exists($request, $requestUrl)) {
             $param['key'] = \Config::get('google-api.applicationKey');
             $url = sprintf($requestUrl[$request], http_build_query($param));
@@ -108,36 +108,123 @@ class GoogleApi {
         return implode('|', array_map(self::latlng, $path));
     }
 
+    public static function useTypes($names) {
+        $keys = [];
+        if (is_array($names)) {
+            foreach ($names as $name) {
+                $keys = array_merge($keys, self::useType($name));
+            }
+        }
+        return array_unique($keys);
+    }
+    
+    public static function useType($name) {
+        if (is_string($name)) {
+            switch (strtolower($name)) {
+                case 'point':
+                    return [ 'street_address', // indicates a precise street address.
+                        'bus_station',
+                        'train_station',
+                        'transit_station', // indicate the location of a bus, train or public transit stop.
+                        'premise', // indicates a named location, usually a building or collection of buildings with a common name
+                        'subpremise', // indicates a first-order entity below a named location, usually a singular building within a collection of buildings with a common name
+                        'natural_feature', // indicates a prominent natural feature.
+                        'airport', // indicates an airport.
+                        'park', // indicates a named park.
+                        'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
+                    ];
+                case 'station':
+                    return [ 'bus_station',
+                        'train_station',
+                        'transit_station', // indicate the location of a bus, train or public transit stop.
+                    ];
+                case 'address':
+                    return [ 'street_address', // indicates a precise street address.
+                        'premise', // indicates a named location, usually a building or collection of buildings with a common name
+                        'subpremise', // indicates a first-order entity below a named location, usually a singular building within a collection of buildings with a common name
+                        'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
+                    ];
+                case 'line':
+                case 'route':
+                    return ['route',
+                        'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
+                    ];
+                case 'area':
+                    return [
+                        'administrative_area_level_1', // indicates a first-order civil entity below the country level. Within the United States, these administrative levels are states. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_2', // indicates a second-order civil entity below the country level. Within the United States, these administrative levels are counties. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_3', // indicates a third-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_4', // indicates a fourth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_5', // indicates a fifth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
+                        'colloquial_area', // indicates a commonly-used alternative name for the entity.
+                        'locality', // indicates an incorporated city or town political entity.
+                        'sublocality', // indicates a first-order civil entity below a locality. For some locations may receive one of the additional types: sublocality_level_1 to sublocality_level_5. Each sublocality level is a civil entity. Larger numbers indicate a smaller geographic area.
+                        'sublocality_level_1',
+                        'sublocality_level_2',
+                        'sublocality_level_3',
+                        'sublocality_level_4',
+                        'sublocality_level_5',
+                        'premise', // indicates a named location, usually a building or collection of buildings with a common name
+                        'natural_feature', // indicates a prominent natural feature.
+                        'park', // indicates a named park.
+                        'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
+                    ];
+                case 'administrative':
+                    return [
+                        'administrative_area', // indicates a first-order civil entity below the country level. Within the United States, these administrative levels are states. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_1', // indicates a first-order civil entity below the country level. Within the United States, these administrative levels are states. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_2', // indicates a second-order civil entity below the country level. Within the United States, these administrative levels are counties. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_3', // indicates a third-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_4', // indicates a fourth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
+                        'administrative_area_level_5', // indicates a fifth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
+                    ];
+                case 'locality':
+                    return [
+                        'colloquial_area', // indicates a commonly-used alternative name for the entity.
+                        'locality', // indicates an incorporated city or town political entity.
+                        'premise', // indicates a named location, usually a building or collection of buildings with a common name
+                        'natural_feature', // indicates a prominent natural feature.
+                        'park', // indicates a named park.
+                        'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
+                    ];
+                case 'sublocality':
+                    return [
+                        'sublocality', // indicates a first-order civil entity below a locality. For some locations may receive one of the additional types: sublocality_level_1 to sublocality_level_5. Each sublocality level is a civil entity. Larger numbers indicate a smaller geographic area.
+                        'sublocality_level_1',
+                        'sublocality_level_2',
+                        'sublocality_level_3',
+                        'sublocality_level_4',
+                        'sublocality_level_5',
+                    ];
+            }
+            return self::useTypes(explode(',',$name));
+        } elseif(is_array($name)) {
+            return self::useTypes($name);
+        }
+        return [];
+    }
+
     public static function getFirst($objects, $types = []) {
         if ($types) {
-            foreach ($objects as $object) {
-                if (array_intersect($object['types'], $types)) {
-                    return $object;
+            if ($objects) {
+                foreach ($objects as $object) {
+                    if (array_intersect($object['types'], $types)) {
+                        return $object;
+                    }
                 }
             }
+        } elseif($objects) {
+            return reset($objects);
         }
         return null;
     }
 
     public static function getFirstPoint($objects) {
-        return self::getFirst($objects, [
-                    'street_address', // indicates a precise street address.
-                    'bus_station',
-                    'train_station',
-                    'transit_station', // indicate the location of a bus, train or public transit stop.
-                    'premise', // indicates a named location, usually a building or collection of buildings with a common name
-                    'subpremise', // indicates a first-order entity below a named location, usually a singular building within a collection of buildings with a common name
-                    'natural_feature', // indicates a prominent natural feature.
-                    'airport', // indicates an airport.
-                    'park', // indicates a named park.
-                    'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
-        ]);
+        return self::getFirst($objects, self::useType('point'));
     }
 
     public static function getFirstLine($objects) {
-        return self::getFirst($objects, ['route',
-                    'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
-        ]);
+        return self::getFirst($objects, self::useType('route'));
     }
 
     public static function getFirstRoute($objects) {
@@ -145,20 +232,7 @@ class GoogleApi {
     }
 
     public static function getFirstArea($objects) {
-        return self::getFirst($objects, [
-                    'administrative_area_level_1', // indicates a first-order civil entity below the country level. Within the United States, these administrative levels are states. Not all nations exhibit these administrative levels.
-                    'administrative_area_level_2', // indicates a second-order civil entity below the country level. Within the United States, these administrative levels are counties. Not all nations exhibit these administrative levels.
-                    'administrative_area_level_3', // indicates a third-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
-                    'administrative_area_level_4', // indicates a fourth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
-                    'administrative_area_level_5', // indicates a fifth-order civil entity below the country level. This type indicates a minor civil division. Not all nations exhibit these administrative levels.
-                    'colloquial_area', // indicates a commonly-used alternative name for the entity.
-                    'locality', // indicates an incorporated city or town political entity.
-                    'sublocality', // indicates a first-order civil entity below a locality. For some locations may receive one of the additional types: sublocality_level_1 to sublocality_level_5. Each sublocality level is a civil entity. Larger numbers indicate a smaller geographic area.
-                    'premise', // indicates a named location, usually a building or collection of buildings with a common name
-                    'natural_feature', // indicates a prominent natural feature.
-                    'park', // indicates a named park.
-                    'point_of_interest', // indicates a named point of interest. Typically, these "POI"s are prominent local entities t
-        ]);
+        return self::getFirst($objects, self::useType('area'));
     }
 
 }
