@@ -60,6 +60,25 @@ class GoogleApi {
         }
         return [];
     }
+    
+    public function __call($name,$param) {
+        return $this->call($name,$param);
+    }
+    
+    public function __callStatic($name,$param) {
+        $requestUrl = \Config::get('google-api.requestUrl'); 
+        if (array_key_exists($request, $requestUrl)) {
+            $param['key'] = \Config::get('google-api.applicationKey');
+            $url = sprintf($requestUrl[$request], http_build_query($param));
+            $answer = file_get_contents($url);
+            $json = json_decode($answer, true);
+
+            if ($json['status'] === 'OK') {
+                return $json['results'];
+            }
+        }
+        return [];
+    }
 
     /**
      * 

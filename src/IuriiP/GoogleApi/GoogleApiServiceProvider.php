@@ -33,8 +33,8 @@ class GoogleApiServiceProvider extends ServiceProvider {
     public function register() {
         $this->app['GoogleApi'] = $this->app->share(function($app) {
             $config = array();
-            $config['applicationKey'] = Config::get('google-api.applicationKey');
-            $config['requestUrl'] = Config::get('google-api.requestUrl');
+            $config['applicationKey'] = \Config::get('google-api.applicationKey');
+            $config['requestUrl'] = \Config::get('google-api.requestUrl');
             // Throw an error if request URL is empty
             if (empty($config['requestUrl'])) {
                 throw new \InvalidArgumentException('Request URL is empty, please check your config file.');
