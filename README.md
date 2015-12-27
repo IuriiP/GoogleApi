@@ -31,12 +31,10 @@ Provide config
 ```bash
 $ php artisan vendor:provide --config
 ```
-Add your (Google application key)[https://developers.google.com/maps/documentation/geocoding/get-api-key] 
+Add your [Google application key](https://developers.google.com/maps/documentation/geocoding/get-api-key) 
 into the created google-api.php
 ```php
-'providers' => array(
-    'IuriiP\GoogleApi\GoogleApiServiceProvider',
-)
+'applicationKey' => 'yourKeyForTheGoogleApiAccess',
 ```
 
 
