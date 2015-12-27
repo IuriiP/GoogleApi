@@ -1,5 +1,5 @@
-# GoogleApis
-Google Maps APIs helper for Laravel 5.0
+# Google API
+Google Maps API helper for Laravel 5.0
 
 Read more on [Wiki](https://github.com/IuriiP/GoogleApi/wiki)
 
