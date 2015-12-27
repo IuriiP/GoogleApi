@@ -46,7 +46,9 @@ Methods
 ----
 
 - Predefined *static* helpers:
-  - ```php string function latlng(array $pair)``` - format a coordinates pair as 'comma-separated' string
+  - ```php 
+string function latlng(array $pair)
+``` - format a coordinates pair as 'comma-separated' string
   - **string path(array $coords)** - format an array of coordinates as 'pipe-separated' string
   - **mixed getFirst(array $results[, array $types])** - get from results the first record with specified type (or just first)
   - **mixed getFirstPoint(array $results)** - call **getFirst** with the predefined 'point-oriented' list of types
