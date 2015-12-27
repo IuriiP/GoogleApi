@@ -205,8 +205,8 @@ class GoogleApi {
         return [$name];
     }
 
-    public static function isType($object, $type) {
-        if (array_intersect($object['types'], self::useType($type))) {
+    public static function isType($object, $types) {
+        if (array_intersect($object['types'], $types)) {
             return true;
         }
         return false;
@@ -223,10 +223,7 @@ class GoogleApi {
     }
 
     public static function isPoint($object) {
-        if (array_intersect($object['types'], self::useType('point'))) {
-            return true;
-        }
-        return false;
+        return self::isType($object,self::useType('point'));
     }
 
     public static function getType($object) {
