@@ -46,7 +46,7 @@ Methods
 ----
 
 - Predefined *static* helpers:
-  - ```php 
+```php 
 string function latlng(array $pair)
 ``` - format a coordinates pair as 'comma-separated' string
   - **string path(array $coords)** - format an array of coordinates as 'pipe-separated' string
