@@ -45,47 +45,27 @@ into the created google-api.php
 Methods
 ----
 
-- Predefined *static* helpers
+- Predefined *static* helpers:
+  - **string latlng(array $pair)** - format a coordinates pair as 'comma-separated' string
+  - **string path(array $coords)** - format an array of coordinates as 'pipe-separated' string
+  - **mixed getFirst(array $results[, array $types])** - get from results the first record with specified type (or just first)
+  - **mixed getFirstPoint(array $results)** - call **getFirst** with the predefined 'point-oriented' list of types
+  - **mixed getFirstLine(array $results)** - call **getFirst** with the predefined 'line-oriented' list of types ('route')
+  - **mixed getFirstRoute(array $results)** - alias for **getFirstLine**
+  - **mixed getFirstArea(array $results)** - call **getFirst** with the predefined 'area-oriented' list of types
+  - **array useType(string|array $name)** - the $name parameter can be *array* , *comma-separated string* of names or just a predefined named type. 
+  - **array useTypes(array $names)** - the $names parameter is array of the predefined named types. 
 
--- **string latlng(array $pair)** - format a coordinates pair as 'comma-separated' string
-
--- **string path(array $coords)** - format an array of coordinates as 'pipe-separated' string
-
--- **getFirst(array $results[, array $types])** - get from results the first record with specified type (or just first)
-
---- **getFirstPoint(array $results)** - call **getFirst** with the predefined 'point-oriented' list of types
-
---- **getFirstLine(array $results)** - call **getFirst** with the predefined 'line-oriented' list of types ('route')
-
---- **getFirstRoute(array $results)** - alias for **getFirstLine**
-
---- **getFirstArea(array $results)** - call **getFirst** with the predefined 'area-oriented' list of types
-
--- **array useType(string|array $name)** - the $name parameter can be *array* , 
-*comma-separated string* of names or just a predefined named type. 
-
--- **array useTypes(array $names)** - the $names parameter is array of the predefined named types. 
-
-**Predefined named types:**
-
---- **point** any point
-
---- **station** any station
-
---- **address** any 'roof-top' address
-
---- **line** any line
-
---- **route** route
-
---- **area** any area
-
---- **administrative** any administrative area (1-5)
-
---- **locality** any locality
-
---- **sublocality** any sublocality (1-5)
-
+- Predefined named types:-
+  - **point** any point
+  - **station** any station
+  - **address** any 'roof-top' address
+  - **line** any line
+  - **route** route
+  - **area** any area
+  - **administrative** any administrative area (1-5)
+  - **locality** any locality
+  - **sublocality** any sublocality (1-5)
 
 All requests are 'pseudo-methods' and must has a specified key in the 'requestUrl' parameter.
 The named parameters are expand with the key and insert as http-coded into the `%s` position.
